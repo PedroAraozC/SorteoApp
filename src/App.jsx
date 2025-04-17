@@ -2,7 +2,8 @@ import { useState } from "react";
 import SorteoForm from "./components/SorteoForm/SorteoForm";
 import ProcesoSorteo from "./components/ProcesoSorteo/ProcesoSorteo";
 import ResultadosSorteo from "./components/ResultadosSorteo/ResultadosSorteo";
-import "./index.css";
+import "./App.css"; // Cambia a un archivo CSS personalizado
+
 function App() {
   const [etapa, setEtapa] = useState("configuracion"); // configuracion, procesando, resultados
   const [isLoading, setIsLoading] = useState(false);
@@ -85,30 +86,31 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-gray-100 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="app-container">
+      <div className="content-wrapper">
         {/* Cabecera */}
-        <header className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-indigo-900 mb-2">
-            Sorteous
-          </h1>
-          <p className="text-gray-600">
-            Realiza sorteos transparentes y profesionales
-          </p>
+        <header className="header">
+          <h1 className="title">Sorteos</h1>
+          <p className="subtitle">Realiza sorteos transparentes y profesionales</p>
         </header>
 
-        {/* Contenedor principal con efecto de transición */}
-        <div className="transition-all duration-500 ease-in-out">
+        <div className="main-content">
           {etapa === "configuracion" && (
-            <div className="transform transition-all duration-500 ease-in-out">
+            <div className="form-container">
               <SorteoForm onSubmit={handleFormSubmit} isLoading={isLoading} />
             </div>
           )}
 
           {etapa === "procesando" && datosSorteo && (
-            <div className="transform transition-all duration-500 ease-in-out">
+            <div className="processing-container">
               <ProcesoSorteo
-                participantes={[]} // Se llena desde handleFormSubmit
+                participantes={[
+                  { id: 1, nombre: '@user123', perfil: 'https://instagram.com/user123', comentario: '¡Quiero participar! #sorteo 🎉' },
+                  { id: 2, nombre: '@maria_89', perfil: 'https://instagram.com/maria_89', comentario: '¡Me encantaría ganar! #sorteo 🤞' },
+                  { id: 3, nombre: '@juan2023', perfil: 'https://instagram.com/juan2023', comentario: 'Participando #sorteo ✨' },
+                  { id: 4, nombre: '@gaming_pro', perfil: 'https://instagram.com/gaming_pro', comentario: '¡Aquí estoy! #sorteo 🎮' },
+                  { id: 5, nombre: '@laura.smith', perfil: 'https://instagram.com/laura.smith', comentario: '¡Suerte a todos! #sorteo 🍀' }
+                ]}
                 duracion={5000}
                 onSorteoCompleto={handleSorteoCompleto}
                 datosSorteo={datosSorteo}
@@ -117,7 +119,7 @@ function App() {
           )}
 
           {etapa === "resultados" && resultados && (
-            <div className="transform transition-all duration-500 ease-in-out">
+            <div className="results-container">
               <ResultadosSorteo
                 resultados={resultados}
                 onReiniciar={handleReiniciar}
@@ -127,11 +129,8 @@ function App() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-12 text-center text-sm text-gray-500">
-          <p>
-            © {new Date().getFullYear()} Sorteous - Todos los derechos
-            reservados
-          </p>
+        <footer className="footer">
+          <p>© {new Date().getFullYear()} Sorteos - Todos los derechos reservados</p>
         </footer>
       </div>
     </div>

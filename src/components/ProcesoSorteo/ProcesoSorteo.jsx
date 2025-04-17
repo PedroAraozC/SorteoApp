@@ -50,13 +50,17 @@ function ProcesoSorteo({
     const animar = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const tiempoTranscurrido = timestamp - startTime;
-      const progresoActual = Math.min(tiempoTranscurrido / duracion, 1);
 
+      // Aumentar la duración efectiva para que el progreso sea más lento
+      const duracionAjustada = duracion * 1.5; // Incrementar duración en un 50%
+      const progresoActual = Math.min(tiempoTranscurrido / duracionAjustada, 1);
+
+      // Actualizar el progreso de forma gradual
       setProgreso(progresoActual * 100);
 
       // Actualizar más frecuente al principio, más lento al final
       const debeCambiar =
-        timestamp - ultimoTiempo > 50 + Math.pow(progresoActual, 2) * 450; // 50ms al inicio, hasta 500ms al final
+        timestamp - ultimoTiempo > 50 + Math.pow(progresoActual, 2) * 450;
 
       if (debeCambiar) {
         mostrarParticipantesAleatorios();
@@ -140,63 +144,97 @@ function ProcesoSorteo({
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
+    <div className="container bg-white p-4 rounded shadow-lg">
       {/* Cabecera */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold mb-2">
-          {estado === "preparando" && "Preparando sorteo..."}
-          {estado === "barajando" && "Barajando participantes"}
-          {estado === "seleccionando" && "¡Seleccionando ganadores!"}
-          {estado === "completado" && "¡Sorteo completado!"}
+      <div className="text-center mb-4">
+        <h2 className="h4 font-weight-bold mb-3">
+          {estado === "preparando" && "🎉 ¡Preparando el sorteo del año! 🎉"}
+          {estado === "barajando" && "🔄 ¡Barajando a los participantes! 🔄"}
+          {estado === "seleccionando" && "🏆 ¡Eligiendo a los ganadores! 🏆"}
+          {estado === "completado" && "🎊 ¡El sorteo ha finalizado! 🎊"}
         </h2>
 
         {/* Barra de progreso */}
         {(estado === "barajando" || estado === "preparando") && (
-          <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 overflow-hidden">
+          <div className="progress mb-3" style={{ height: "20px" }}>
             <div
-              className="bg-gradient-to-r from-indigo-500 to-purple-600 h-2.5 rounded-full transition-all duration-300 ease-out"
-              style={{ width: `${progreso}%` }}
+              className="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+              role="progressbar"
+              style={{
+                width: `${progreso}%`,
+                transition: "width 0.3s ease-in-out",
+                background: `linear-gradient(45deg, 
+                  #007bff 25%, 
+                  #0056b3 25%, 
+                  #0056b3 50%, 
+                  #007bff 50%, 
+                  #007bff 75%, 
+                  #0056b3 75%, 
+                  #0056b3)`,
+                backgroundSize: "40px 40px",
+                animation: "progress-bar-move 1s linear infinite"
+              }}
             ></div>
           </div>
         )}
 
+        <style>
+          {`
+            @keyframes progress-bar-move {
+              0% {
+                background-position: 0 0;
+              }
+              100% {
+                background-position: 40px 0;
+              }
+            }
+          `}
+        </style>
+
         {/* Plataforma y tipo de sorteo */}
-        <p className="text-gray-600">
+        <p className="text-muted">
           {datosSorteo?.plataforma && (
             <>
               {datosSorteo.plataforma === "instagram" && "📷"}
               {datosSorteo.plataforma === "facebook" && "👍"}
               {datosSorteo.plataforma === "youtube" && "▶️"}
               {datosSorteo.plataforma === "tiktok" && "🎵"}
-              {" Sorteo en "}
+              {" ¡Sorteo exclusivo en "}
               {datosSorteo.plataforma.charAt(0).toUpperCase() +
                 datosSorteo.plataforma.slice(1)}
+              {"!"}
             </>
           )}
         </p>
       </div>
 
       {/* Área de barajado */}
-      <div className="relative h-64 sm:h-80 md:h-96 mb-8 overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 border">
+      <div
+        className="position-relative overflow-hidden rounded bg-light border mb-4"
+        style={{
+          height: "300px",
+          background: "linear-gradient(135deg, #f3f4f6, #e5e7eb)",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         {/* Participantes que se muestran durante el barajado */}
-        <div className="absolute inset-0 flex flex-wrap justify-center items-center gap-2 sm:gap-3 p-4">
+        <div className="d-flex flex-wrap justify-content-center align-items-center gap-3 p-3">
           {participantesVisibles.map((participante, index) => (
             <div
               key={`participante-${index}-${participante.nombre}`}
-              className={`
-                transform transition-all duration-300 ease-in-out
-                ${destacado === index ? "scale-110 z-10" : "scale-100"}
-                ${
-                  estado === "seleccionando" && ganadores.includes(participante)
-                    ? "scale-110 z-10 bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
-                    : "bg-white"
-                }
-                px-4 py-2 rounded-lg shadow-md
-              `}
+              className={`p-3 rounded shadow-sm text-center transition-all ${
+                destacado === index
+                  ? "bg-primary text-white scale-110"
+                  : "bg-white text-dark"
+              }`}
+              style={{
+                transform: destacado === index ? "scale(1.1)" : "scale(1)",
+                transition: "transform 0.3s ease, background-color 0.3s ease",
+              }}
             >
-              <p className="font-bold">{participante.nombre}</p>
+              <p className="font-weight-bold mb-1">{participante.nombre}</p>
               {participante.comentario && (
-                <p className="text-xs truncate max-w-xs">
+                <p className="small text-truncate">
                   {participante.comentario.substring(0, 30)}
                   {participante.comentario.length > 30 ? "..." : ""}
                 </p>
@@ -204,35 +242,22 @@ function ProcesoSorteo({
             </div>
           ))}
         </div>
-
-        {/* Efecto de brillo que se mueve a través del área */}
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30"
-          style={{
-            transform: `translateX(${-100 + progreso}%)`,
-            transition: "transform 0.5s ease-out",
-          }}
-        ></div>
       </div>
 
       {/* Texto de estado */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-4">
         {estado === "preparando" && (
-          <p className="text-gray-600 animate-pulse">
-            Analizando participantes...
-          </p>
+          <p className="text-muted">🔍 Analizando cuidadosamente a los participantes...</p>
         )}
-
         {estado === "barajando" && (
-          <p className="text-gray-600">
-            Barajando {participantesPool.current.length} participantes...
+          <p className="text-muted">
+            🔄 ¡Barajando a {participantesPool.current.length} participantes!
           </p>
         )}
-
         {estado === "seleccionando" && (
-          <p className="text-gray-600 font-medium animate-pulse">
-            ¡Tenemos {ganadores.length} ganador
-            {ganadores.length !== 1 ? "es" : ""}!
+          <p className="text-muted font-weight-bold">
+            🎉 ¡Ya tenemos {ganadores.length} ganador
+            {ganadores.length !== 1 ? "es" : ""}! 🎉
           </p>
         )}
       </div>
