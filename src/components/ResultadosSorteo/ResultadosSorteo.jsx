@@ -17,13 +17,13 @@ function ResultadosSorteo({ resultados, onReiniciar }) {
   };
 
   return (
-    <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-5xl mx-auto">
+    <div className="container bg-white p-4 rounded shadow-lg">
       {/* Encabezado */}
-      <div className="text-center mb-8 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white p-8 rounded-2xl shadow-lg">
-        <h2 className="text-5xl font-extrabold mb-4">¡Sorteo Realizado!</h2>
-        <p className="text-xl">
+      <div className="text-center mb-4 bg-primary text-white p-4 rounded">
+        <h2 className="h3 font-weight-bold mb-3">¡Sorteo Realizado!</h2>
+        <p className="h5">
           {getIconoPlataforma(datosSorteo.plataforma)} Sorteo en{" "}
-          <span className="font-semibold underline decoration-wavy decoration-yellow-400">
+          <span className="font-italic">
             {datosSorteo.plataforma.charAt(0).toUpperCase() +
               datosSorteo.plataforma.slice(1)}
           </span>
@@ -31,39 +31,27 @@ function ResultadosSorteo({ resultados, onReiniciar }) {
       </div>
 
       {/* Ganadores */}
-      <div className="mb-12">
-        <h3 className="text-3xl font-bold text-green-600 mb-6 flex items-center">
-          🏆 Ganadores
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="mb-4">
+        <h3 className="h4 text-success mb-3">🏆 Ganadores</h3>
+        <div className="row">
           {ganadores.map((ganador) => (
-            <div
-              key={`ganador-${ganador.id}`}
-              className="border border-green-300 p-6 rounded-xl bg-gradient-to-br from-green-50 to-green-100 shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-bold text-2xl text-green-800">
-                    {ganador.nombre}
-                  </h4>
+            <div key={`ganador-${ganador.id}`} className="col-md-6 mb-3">
+              <div className="card border-success">
+                <div className="card-body">
+                  <h5 className="card-title text-success">{ganador.nombre}</h5>
                   <a
                     href={ganador.perfil}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 text-sm hover:underline"
+                    className="card-link"
                   >
                     Ver perfil
                   </a>
-                </div>
-                <div className="bg-green-600 text-white text-sm font-bold py-1 px-4 rounded-full shadow-md">
-                  #{ganador.id}
+                  {ganador.comentario && (
+                    <p className="card-text mt-2">"{ganador.comentario}"</p>
+                  )}
                 </div>
               </div>
-              {ganador.comentario && (
-                <div className="mt-4 text-sm text-gray-700 bg-white p-4 rounded-lg shadow-inner">
-                  "{ganador.comentario}"
-                </div>
-              )}
             </div>
           ))}
         </div>
@@ -71,39 +59,29 @@ function ResultadosSorteo({ resultados, onReiniciar }) {
 
       {/* Suplentes */}
       {suplentes.length > 0 && (
-        <div className="mb-12">
-          <h3 className="text-3xl font-bold text-orange-600 mb-6 flex items-center">
-            🥈 Suplentes
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="mb-4">
+          <h3 className="h4 text-warning mb-3">🥈 Suplentes</h3>
+          <div className="row">
             {suplentes.map((suplente) => (
-              <div
-                key={`suplente-${suplente.id}`}
-                className="border border-orange-300 p-6 rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-bold text-2xl text-orange-800">
+              <div key={`suplente-${suplente.id}`} className="col-md-6 mb-3">
+                <div className="card border-warning">
+                  <div className="card-body">
+                    <h5 className="card-title text-warning">
                       {suplente.nombre}
-                    </h4>
+                    </h5>
                     <a
                       href={suplente.perfil}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 text-sm hover:underline"
+                      className="card-link"
                     >
                       Ver perfil
                     </a>
-                  </div>
-                  <div className="bg-orange-600 text-white text-sm font-bold py-1 px-4 rounded-full shadow-md">
-                    #{suplente.id}
+                    {suplente.comentario && (
+                      <p className="card-text mt-2">"{suplente.comentario}"</p>
+                    )}
                   </div>
                 </div>
-                {suplente.comentario && (
-                  <div className="mt-4 text-sm text-gray-700 bg-white p-4 rounded-lg shadow-inner">
-                    "{suplente.comentario}"
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -111,22 +89,18 @@ function ResultadosSorteo({ resultados, onReiniciar }) {
       )}
 
       {/* Resumen del sorteo */}
-      <div className="mb-12 bg-gray-50 p-8 rounded-2xl shadow-md">
-        <h3 className="font-semibold text-2xl mb-6 text-gray-800">
-          📋 Resumen del sorteo
-        </h3>
-        <ul className="space-y-4 text-lg">
+      <div className="mb-4 bg-light p-4 rounded">
+        <h3 className="h5 mb-3">📋 Resumen del sorteo</h3>
+        <ul className="list-unstyled">
           <li>
-            <span className="font-medium text-gray-700">Plataforma:</span>{" "}
-            {datosSorteo.plataforma}
+            <strong>Cuentas que realizan el sorteo:</strong> {datosSorteo.cuentasSorteo}
           </li>
           <li>
-            <span className="font-medium text-gray-700">Cuentas:</span>{" "}
-            {datosSorteo.cuentasSorteo}
+            <strong>Plataforma:</strong> {datosSorteo.plataforma}
           </li>
           <li>
-            <span className="font-medium text-gray-700">Condiciones:</span>
-            <ul className="ml-6 list-disc text-gray-600">
+            <strong>Condiciones:</strong>
+            <ul>
               {datosSorteo.requiereFollow && <li>Seguir cuenta(s)</li>}
               {datosSorteo.requiereLike && <li>Dar "Me gusta"</li>}
               {datosSorteo.requiereComentario && (
@@ -142,18 +116,15 @@ function ResultadosSorteo({ resultados, onReiniciar }) {
       </div>
 
       {/* Botones */}
-      <div className="flex justify-center gap-6">
-        <button
-          onClick={onReiniciar}
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-8 rounded-lg shadow-md transition-transform transform hover:scale-105"
-        >
+      <div className="d-flex justify-content-center gap-3">
+        <button onClick={onReiniciar} className="btn btn-secondary">
           🔄 Realizar otro sorteo
         </button>
         <button
           onClick={() => {
             /* Implementar exportación */
           }}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg shadow-md transition-transform transform hover:scale-105"
+          className="btn btn-primary"
         >
           📤 Exportar resultados
         </button>
