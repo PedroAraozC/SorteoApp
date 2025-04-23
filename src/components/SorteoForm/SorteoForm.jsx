@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 function SorteoForm({ onSubmit, isLoading }) {
   const [formData, setFormData] = useState({
-    plataforma: 'instagram',
-    urlPublicacion: '',
-    cuentasSorteo: '',
+    plataforma: "instagram",
+    urlPublicacion: "",
+    cuentasSorteo: "",
     requiereFollow: false,
     requiereLike: false,
     requiereComentario: false,
     comentarioMultiple: false,
     cantidadGanadores: 1,
-    cantidadSuplentes: 1
+    cantidadSuplentes: 1,
   });
   const [previewError, setPreviewError] = useState(false);
 
@@ -24,7 +24,7 @@ function SorteoForm({ onSubmit, isLoading }) {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -53,7 +53,7 @@ function SorteoForm({ onSubmit, isLoading }) {
           </select>
         </div>
 
-        <div className="mb-3" >
+        <div className="mb-3">
           <label className="form-label">Link de la Publicación</label>
           <input
             type="url"
@@ -72,12 +72,13 @@ function SorteoForm({ onSubmit, isLoading }) {
                   src={formData.urlPublicacion}
                   title="Vista previa de la publicación"
                   className="w-100"
-                  style={{ height: '400px', border: 'none' }}
+                  style={{ height: "400px", border: "none" }}
                   onError={() => setPreviewError(true)}
                 />
               ) : (
                 <div className="alert alert-warning" role="alert">
-                  No se puede cargar la vista previa de la publicación. Verifica la URL o abre el enlace directamente.
+                  No se puede cargar la vista previa de la publicación. Verifica
+                  la URL o abre el enlace directamente.
                 </div>
               )}
             </div>
@@ -110,8 +111,11 @@ function SorteoForm({ onSubmit, isLoading }) {
                 checked={formData.requiereFollow}
                 onChange={handleChange}
                 className="form-check-input"
+                id="seguirCheckbox"
               />
-              <label className="form-check-label">Seguir cuenta(s)</label>
+              <label for="seguirCheckbox" className="form-check-label">
+                Seguir cuenta(s)
+              </label>
             </div>
             <div className="form-check">
               <input
@@ -120,8 +124,11 @@ function SorteoForm({ onSubmit, isLoading }) {
                 checked={formData.requiereLike}
                 onChange={handleChange}
                 className="form-check-input"
+                id="meGustaCheckbox"
               />
-              <label className="form-check-label">Dar "Me gusta"</label>
+              <label for="meGustaCheckbox" lassName="form-check-label">
+                Dar "Me gusta"
+              </label>
             </div>
             <div className="form-check">
               <input
@@ -130,8 +137,11 @@ function SorteoForm({ onSubmit, isLoading }) {
                 checked={formData.requiereComentario}
                 onChange={handleChange}
                 className="form-check-input"
+                id="comentariosCheckbox"
               />
-              <label className="form-check-label">Comentar</label>
+              <label for="comentariosCheckbox" className="form-check-label">
+                Comentar
+              </label>
             </div>
             {formData.requiereComentario && (
               <div className="form-check ms-3">
@@ -141,8 +151,9 @@ function SorteoForm({ onSubmit, isLoading }) {
                   checked={formData.comentarioMultiple}
                   onChange={handleChange}
                   className="form-check-input"
+                  id="masPosibilidadesCheckBox"
                 />
-                <label className="form-check-label">
+                <label for="masPosibilidadesCheckBox" className="form-check-label">
                   Más comentarios = más posibilidades
                 </label>
               </div>
